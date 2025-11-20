@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: mongodb-demo
+    env: node
+    plan: free
+    repo: https://github.com/<your-username>/<repo-name>
+    branch: main
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MONGO_URI
+        scope: private
+      - key: DB_NAME
+        scope: private
