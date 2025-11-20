@@ -1,0 +1,89 @@
+{
+  "success": true,
+  "results": {
+    "insertedCount": 4,
+    "insertedIds": {
+      "0": "691ebf804ecc1be7fa87c170",
+      "1": "691ebf804ecc1be7fa87c171",
+      "2": "691ebf804ecc1be7fa87c172",
+      "3": "691ebf804ecc1be7fa87c173"
+    },
+    "all": [
+      {
+        "_id": "691ebf804ecc1be7fa87c170",
+        "roll_no": 1,
+        "name": "Alice",
+        "department": "CSE",
+        "marks": 85
+      },
+      {
+        "_id": "691ebf804ecc1be7fa87c171",
+        "roll_no": 2,
+        "name": "Bob",
+        "department": "ECE",
+        "marks": 78
+      },
+      {
+        "_id": "691ebf804ecc1be7fa87c172",
+        "roll_no": 3,
+        "name": "Charlie",
+        "department": "CSE",
+        "marks": 92
+      },
+      {
+        "_id": "691ebf804ecc1be7fa87c173",
+        "roll_no": 4,
+        "name": "David",
+        "department": "MECH",
+        "marks": 67
+      }
+    ],
+    "updateMatched": 2,
+    "updateModified": 2,
+    "projection": [
+      {
+        "name": "Alice",
+        "marks": 85
+      },
+      {
+        "name": "Bob",
+        "marks": 78
+      },
+      {
+        "name": "Charlie",
+        "marks": 92
+      },
+      {
+        "name": "David",
+        "marks": 67
+      }
+    ],
+    "deletedCount": 1,
+    "final": [
+      {
+        "_id": "691ebf804ecc1be7fa87c170",
+        "roll_no": 1,
+        "name": "Alice",
+        "department": "CSE",
+        "marks": 85,
+        "status": "Passed"
+      },
+      {
+        "_id": "691ebf804ecc1be7fa87c171",
+        "roll_no": 2,
+        "name": "Bob",
+        "department": "ECE",
+        "marks": 78
+      },
+      {
+        "_id": "691ebf804ecc1be7fa87c172",
+        "roll_no": 3,
+        "name": "Charlie",
+        "department": "CSE",
+        "marks": 92,
+        "status": "Passed"
+      }
+    ]
+  },
+  "usingInMemory": true
+}
