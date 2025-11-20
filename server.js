@@ -30,6 +30,9 @@ async function getClient() {
   return { client, isMemory: true, mongod };
 }
 
+// store last run results so /view can show them
+let lastResults = null;
+
 async function runCrudDemo(db) {
   const results = {};
   await db.collection('students').deleteMany({});
@@ -78,7 +81,10 @@ app.post('/run-demo', async (req, res) => {
 
     const results = await runCrudDemo(db);
 
-    res.json({ success: true, results, usingInMemory: !!clientInfo.isMemory });
+      // store last results for viewing
+      lastResults = { success: true, results, usingInMemory: !!clientInfo.isMemory };
+
+      res.json(lastResults);
 
     await client.close();
     if (clientInfo.mongod) await clientInfo.mongod.stop();
@@ -88,6 +94,33 @@ app.post('/run-demo', async (req, res) => {
   }
 });
 
+// simple browser view to show last run results
+app.get('/view', (req, res) => {
+  if (!lastResults) return res.send('<p>No demo run yet. POST to <code>/run-demo</code> to create sample data.</p>');
+  const pretty = JSON.stringify(lastResults, null, 2)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  res.send(`<!doctype html><html><head><meta charset="utf-8"><title>Demo Results</title><style>body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:20px}pre{background:#f6f8fa;padding:16px;border-radius:6px;overflow:auto}</style></head><body><h1>Last /run-demo results</h1><pre>${pretty}</pre></body></html>`);
+});
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
+  // Run the demo once at startup to populate /view automatically
+  (async () => {
+    try {
+      console.log('Running initial demo on startup...');
+      const clientInfo = await getClient();
+      const client = clientInfo.client;
+      const dbName = process.env.DB_NAME || 'studentDB';
+      const db = client.db(dbName);
+      const results = await runCrudDemo(db);
+      lastResults = { success: true, results, usingInMemory: !!clientInfo.isMemory };
+      await client.close();
+      if (clientInfo.mongod) await clientInfo.mongod.stop();
+      console.log('Initial demo complete.');
+    } catch (err) {
+      console.error('Initial demo failed:', err);
+    }
+  })();
 });
