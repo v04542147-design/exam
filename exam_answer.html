@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MongoDB — One-page Summary</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:24px;line-height:1.35;color:#111}
+    h1{font-size:20px;margin-bottom:6px}
+    h2{font-size:14px;margin-top:18px;margin-bottom:6px}
+    pre{background:#f4f4f4;padding:10px;border-radius:6px;overflow:auto}
+    code{font-family:Consolas,monospace}
+  </style>
+</head>
+<body>
+  <h1>MongoDB — Installation, Atlas Setup, CRUD (1-page)</h1>
+  <h2>Install MongoDB (Windows quick)</h2>
+  <ol>
+    <li>Download Community Server (MSI): https://www.mongodb.com/try/download/community and run the installer.</li>
+    <li>Install as a Service (optional), optionally install Compass.</li>
+    <li>Install mongosh: https://www.mongodb.com/try/download/shell, verify <code>mongosh --version</code>.</li>
+  </ol>
+
+  <h2>Atlas (cloud)</h2>
+  <ol>
+    <li>Sign up at Atlas → Create a Free Cluster (M0).</li>
+    <li>Create DB user (username/password) in Security → Database Access.</li>
+    <li>Allow your IP in Network Access (for tests you can add 0.0.0.0/0, but don't do this for production).</li>
+    <li>Use the connection string (mongodb+srv://...).</li>
+  </ol>
+
+  <h2>Node quick connect</h2>
+  <pre><code>const { MongoClient } = require('mongodb');
+const client = new MongoClient(process.env.MONGO_URI || 'mongodb://localhost:27017');
+await client.connect();
+const db = client.db('myDB');
+await db.collection('students').insertOne({ name:'A' });
+await client.close();</code></pre>
+
+  <h2>CRUD shell commands</h2>
+  <pre><code>// Insert
+db.students.insertOne({ roll_no:1, name:'Alice', department:'CSE', marks:85 })
+// Find
+db.students.find({ department:'CSE' }).pretty()
+// Update
+db.students.updateOne({ roll_no:2 }, { $set:{ marks:82 } })
+// Delete
+db.students.deleteOne({ roll_no:4 })</code></pre>
+
+  <h2>Fast demo (no local MongoDB)</h2>
+  <pre><code>npm run start:memory
+# Starts an in-memory MongoDB and runs CRUD demo (uses mongodb-memory-server)</code></pre>
+
+  <h2>Sample last run (short)</h2>
+  <pre><code>{ "insertedCount":4, "updateMatched":2, "updateModified":2, "deletedCount":1, "final":[...], "usingInMemory":true }</code></pre>
+
+  <p>Want a PDF or PPT exported from this page? Say which and I'll create it.</p>
+</body>
+</html>
